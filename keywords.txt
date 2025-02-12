@@ -1,0 +1,4 @@
+Encoder	KEYWORD1
+begin	KEYWORD2
+read	KEYWORD2
+limitedRead	KEYWORD2
