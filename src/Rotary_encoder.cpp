@@ -59,11 +59,7 @@ long Encoder::limitedRead(int Minval, int Maxval)
     lastDebounceTime = millis();
   }
   
-  if(position < Minval) {
-    position = Minval;
-  } else if(position > Maxval) {
-    position = Maxval;
-  }
+  position = constrain(read(), Minval, Maxval);
 
   lastCLK = currentCLK;
   return position;
