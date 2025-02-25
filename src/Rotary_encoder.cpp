@@ -44,27 +44,6 @@ long Encoder::read()
 
 long Encoder::limitedRead(int Minval, int Maxval)
 {
-  int currentCLK = digitalRead(_CLK_PIN);
-  int currentDT = digitalRead(_DT_PIN);
-
-  // Debouncing
-  if ((currentCLK != lastCLK) && (millis() - lastDebounceTime > 5)) {
-    if (currentCLK == LOW) {
-      if (currentDT == HIGH) {
-        position++;
-      } else {
-        position--;
-      }
-    }
-    lastDebounceTime = millis();
-  }
-  
-  if(position < Minval) {
-    position = Minval;
-  } else if(position > Maxval) {
-    position = Maxval;
-  }
-
-  lastCLK = currentCLK;
+  position = constrain(read(), Minval, Maxval);
   return position;
 }
