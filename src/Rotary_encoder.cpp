@@ -14,12 +14,16 @@ Encoder::Encoder(int CLK_PIN, int DT_PIN)
   lastCLK = LOW; // Initialize lastCLK
 }
 
+
+
 void Encoder::begin()
 {
   pinMode(_CLK_PIN, INPUT_PULLUP);
   pinMode(_DT_PIN, INPUT_PULLUP);
     
 }
+
+
 
 long Encoder::read()
 {
@@ -42,8 +46,22 @@ long Encoder::read()
   return position;
 }
 
+
+
 long Encoder::limitedRead(int Minval, int Maxval)
 {
   position = constrain(read(), Minval, Maxval);
   return position;
+}
+
+
+
+long Encoder::setPosition(int pos)
+{
+  position = pos;
+  if(position == pos) {
+    return true;
+  } else {
+    return false;
+  }
 }
