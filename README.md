@@ -6,6 +6,9 @@ Reads the position of a rotary encoder.
 
 Simple Arduino library used to read the position of an incremental rotary encoder.
 
+> [!NOTE]
+> Currently this library works much better on microcontrollers with higher clock speeds for example the Seeeduino XIAO
+
 ## Testing
 
 This library was tested on:
