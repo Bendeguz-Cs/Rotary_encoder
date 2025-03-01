@@ -15,6 +15,7 @@ class Encoder
     void begin();
     long read();
     long limitedRead(int Minval, int Maxval);
+    long setPosition(int pos);
 
   private:
     int _CLK_PIN;
