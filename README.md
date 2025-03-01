@@ -13,13 +13,13 @@ This library was tested on:
 <details><summary>Arduino Boards</summary>
 <p>
 
-Arduino NANO
+- Arduino NANO
 
-Arduino UNO R3
+- Arduino UNO R3
 
-Arduino UNO R4 MINIMA
+- Arduino UNO R4 MINIMA
 
-Arduino UNO R4 WiFi
+- Arduino UNO R4 WiFi
 
 >  
 >  
@@ -30,7 +30,7 @@ Arduino UNO R4 WiFi
 <details><summary>Other Boards</summary>
 <p>
 
-Seeeduino XIAO SAMD21
+- Seeeduino XIAO SAMD21
 
 >  
 >  
