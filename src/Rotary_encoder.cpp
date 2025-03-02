@@ -27,22 +27,12 @@ void Encoder::begin()
 
 long Encoder::read()
 {
-  int currentCLK = digitalRead(_CLK_PIN);
-  int currentDT = digitalRead(_DT_PIN);
-
-  // Debouncing
-  if ((currentCLK != lastCLK) && (millis() - lastDebounceTime > 5)) {
-    if (currentCLK == LOW) {
-      if (currentDT == HIGH) {
-        position++;
-      } else {
-        position--;
-      }
-    }
-    lastDebounceTime = millis();
+  int8_t direction = getDirection();
+  if (direction == 1) {
+    position++;  // Clockwise
+  } else if (direction == -1) {
+    position--;  // Counterclockwise
   }
-
-  lastCLK = currentCLK;
   return position;
 }
 
@@ -52,6 +42,27 @@ long Encoder::limitedRead(int Minval, int Maxval)
 {
   position = constrain(read(), Minval, Maxval);
   return position;
+}
+
+
+
+long Encoder::getMotion() {
+  int currentCLK = digitalRead(_CLK_PIN);
+  if (currentCLK == LOW && lastCLK == HIGH && (millis() - lastDebounceTime > 5)) {
+    lastDebounceTime = millis();
+    lastCLK = currentCLK;
+    return true;
+  }
+  lastCLK = currentCLK;
+  return false;
+}
+
+
+
+
+int8_t Encoder::getDirection() {
+  if (!getMotion()) return 0;  // No motion detected
+  return digitalRead(_CLK_PIN) != digitalRead(_DT_PIN) ? 1 : -1;
 }
 
 
