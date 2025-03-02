@@ -17,7 +17,7 @@ class Encoder
     long limitedRead(int Minval, int Maxval);
     long getMotion();
     int8_t getDirection();
-    long setPosition(int pos);
+    long setPosition(long pos);
 
   private:
     int _CLK_PIN;
