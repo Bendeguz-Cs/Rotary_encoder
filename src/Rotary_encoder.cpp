@@ -67,7 +67,7 @@ int8_t Encoder::getDirection() {
 
 
 
-long Encoder::setPosition(int pos)
+long Encoder::setPosition(long pos)
 {
   position = pos;
   if(position == pos) {
