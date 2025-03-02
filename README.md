@@ -9,12 +9,12 @@ Simple Arduino library used to read the position of an incremental rotary encode
 > [!NOTE]
 > Currently this library works much better on microcontrollers with higher clock speeds for example the Seeeduino XIAO
 
-## Testing
+
+
+<details><summary>Compatibility</summary>
+<p>
 
 This library was tested on:
-
-<details><summary>Arduino Boards</summary>
-<p>
 
 - Arduino NANO
 
@@ -23,20 +23,6 @@ This library was tested on:
 - Arduino UNO R4 MINIMA
 
 - Arduino UNO R4 WiFi
-
->  
->  
-
-</p>
-</details>
-
-<details><summary>Other Boards</summary>
-<p>
-
-- Seeeduino XIAO SAMD21
-
->  
->  
 
 </p>
 </details>
