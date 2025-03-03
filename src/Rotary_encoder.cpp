@@ -29,9 +29,9 @@ long Encoder::read()
 {
   int8_t direction = getDirection();
   if (direction == 1) {
-    position++;  // Clockwise
+    position = position + _scale;  // Clockwise
   } else if (direction == -1) {
-    position--;  // Counterclockwise
+    position = position - _scale;  // Counterclockwise
   }
   return position;
 }
@@ -67,7 +67,7 @@ int8_t Encoder::getDirection() {
 
 
 
-long Encoder::setPosition(long pos)
+long Encoder::setPosition(int pos)
 {
   position = pos;
   if(position == pos) {
@@ -75,4 +75,12 @@ long Encoder::setPosition(long pos)
   } else {
     return false;
   }
+}
+
+
+
+void Encoder::scale(int scale = 1)
+{
+  constrain(scale, 1, 100000);
+  _scale = scale;
 }
