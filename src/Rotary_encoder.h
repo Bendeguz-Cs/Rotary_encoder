@@ -17,11 +17,13 @@ class Encoder
     long limitedRead(int Minval, int Maxval);
     long getMotion();
     int8_t getDirection();
-    long setPosition(long pos);
+    long setPosition(int pos);
+    void scale(int scale);
 
   private:
     int _CLK_PIN;
     int _DT_PIN;
+    int _scale = 1;
     volatile long position = 0;
     volatile int lastCLK = HIGH;
     unsigned long lastDebounceTime = 0;
@@ -29,3 +31,4 @@ class Encoder
 };
 
 #endif
+
