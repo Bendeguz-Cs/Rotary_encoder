@@ -7,9 +7,7 @@ Reads the position of a rotary encoder.
 Simple Arduino library used to read the position of an incremental rotary encoder.
 
 > [!NOTE]
-> Currently this library works much better on microcontrollers with higher clock speeds like the Seeeduino XIAO or ESP-32
-
-
+> Version 2.0.0 and newer use interrupts, if a **SAMD** or **ESP** chip is selected then `Hardware Interrupts` will be used else the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used
 
 <details><summary>Compatibility</summary>
 <p>
@@ -23,6 +21,8 @@ This library was tested on:
 - Arduino UNO R4 MINIMA
 
 - Arduino UNO R4 WiFi
+
+- Seeeduino XIAO SAMD21
 
 </p>
 </details>
