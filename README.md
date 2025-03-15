@@ -7,7 +7,7 @@ Reads the position of a rotary encoder.
 Simple Arduino library used to read the position of an incremental rotary encoder.
 
 > [!NOTE]
-> Version 2.0.0 and newer use interrupts, if a **SAMD** or **ESP** chip is selected then `Hardware Interrupts` will be used else the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used
+> Version [2.0.0](https://github.com/Bendeguz-Cs/Rotary_encoder/releases/tag/v2.0.0) and newer use interrupts, if a **SAMD** or **ESP** chip is selected then `Hardware Interrupts` will be used else the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used
 
 <details><summary>Compatibility</summary>
 <p>
