@@ -8,27 +8,33 @@
 
 #include "Arduino.h"
 
-class Encoder
-{
+class Encoder {
   public:
     Encoder(int CLK_PIN, int DT_PIN);
     void begin();
     long read();
     long limitedRead(int Minval, int Maxval);
-    long getMotion();
-    int8_t getDirection();
     long setPosition(int pos);
     void scale(int scale);
+
+    // Linked list pointer for multiple encoders
+    Encoder* next;
+
+    // Static function for global ISR
+    static void globalEncoderISR();
 
   private:
     int _CLK_PIN;
     int _DT_PIN;
-    int _scale = 1;
-    volatile long position = 0;
-    volatile int lastCLK = HIGH;
-    unsigned long lastDebounceTime = 0;
-    
+    int _scale;
+    volatile long position;
+    volatile bool lastCLK;
+    volatile unsigned long lastDebounceTime;
+
+    void updateState();  // Private function to update the state
 };
 
-#endif
+// Global linked list of encoders
+extern Encoder* encoderHead;
 
+#endif
