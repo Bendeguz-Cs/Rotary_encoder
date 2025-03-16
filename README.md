@@ -12,7 +12,8 @@ Simple Arduino library used to read the position of an incremental rotary encode
 <details><summary>Compatibility</summary>
 <p>
 
-This library was tested on:
+This library is compatible with **AVR** and all other **MCU**s that have **Hardware interrupts**.
+The library was tested on:
 
 - Arduino NANO
 
