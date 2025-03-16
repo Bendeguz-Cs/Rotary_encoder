@@ -6,13 +6,11 @@
 #include "Arduino.h"
 #include "Rotary_encoder.h"
 
-#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_ESP8266)
+#if defined(ARDUINO_ARCH_AVR)
   #include "PinChangeInterrupt.h"
   #warning "Set up PinChangeInterrupt library!"
-#elif defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_SAMD)
-  #warning "Set up attachInterrupt library!"
 #else
-  #error "This library only works on AVR, SAMD and ESP architectures!"
+  #warning "This library uses Hardware interrupts on your currently selected processor"
 #endif
 
 // Global pointer to the linked list of encoders
@@ -31,10 +29,10 @@ void Encoder::begin() {
   pinMode(_CLK_PIN, INPUT_PULLUP);
   pinMode(_DT_PIN, INPUT_PULLUP);
   
-  #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_ESP8266)
+  #if defined(ARDUINO_ARCH_AVR)
     // Attach global ISR to the CLK pin
     attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
-  #elif defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_ESP32)
+  #else
     // Attach global ISR to the CLK pin
     attachInterrupt(digitalPinToInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
   #endif
