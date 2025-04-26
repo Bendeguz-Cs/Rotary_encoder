@@ -71,7 +71,12 @@ long Encoder::read() {
 }
 
 long Encoder::limitedRead(int Minval, int Maxval) {
-  return constrain(read(), Minval, Maxval);
+  if(position < Minval) {
+    position = Minval;
+  } else if(position > Maxval) {
+    position = Maxval;
+  }
+  return position;
 }
 
 long Encoder::setPosition(int pos) {
