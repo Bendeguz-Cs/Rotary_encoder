@@ -17,8 +17,8 @@
 Encoder* encoderHead = nullptr;
 
 Encoder::Encoder(int CLK_PIN, int DT_PIN)
-  : _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0),
-    lastCLK(LOW), lastDebounceTime(0), next(nullptr)
+  : next(nullptr), _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0),
+    lastCLK(LOW), lastDebounceTime(0)
 {
   // Add this encoder to the linked list
   next = encoderHead;
