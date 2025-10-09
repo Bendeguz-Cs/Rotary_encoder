@@ -1,6 +1,6 @@
 # Rotary_encoder
 
-Reads the position of a rotary encoder.
+Reads the position of a rotary encoderand outputs it with a simple function.
 
 ## Description
 
