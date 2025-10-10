@@ -17,8 +17,8 @@
 Encoder* encoderHead = nullptr;
 
 Encoder::Encoder(int CLK_PIN, int DT_PIN)
-  : next(nullptr), _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0),
-    lastCLK(LOW), lastDebounceTime(0)
+  : _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0),
+    lastCLK(LOW), lastDebounceTime(0), next(nullptr)
 {
   // Add this encoder to the linked list
   next = encoderHead;
@@ -38,12 +38,16 @@ void Encoder::begin() {
   #endif
 }
 
+void Encoder::setDebounceTime(int debounce_time) {
+  _debounce_time = debounce_time;
+}
+
 void Encoder::updateState() {
   bool newCLK = digitalRead(_CLK_PIN);
   bool newDT = digitalRead(_DT_PIN);
 
   // Debounce check (5ms)
-  if ((millis() - lastDebounceTime) < 5) return;
+  if ((millis() - lastDebounceTime) < _debounce_time) return;
   lastDebounceTime = millis();
 
   // Detect rotation on falling edge of CLK
@@ -53,6 +57,9 @@ void Encoder::updateState() {
     } else {
       position -= _scale;  // Counterclockwise
     }
+    _motion_state = true;
+  } else {
+    _motion_state = false;
   }
 
   // Save last CLK state
@@ -64,6 +71,10 @@ void Encoder::globalEncoderISR() {
   for (Encoder* enc = encoderHead; enc != nullptr; enc = enc->next) {
     enc->updateState();
   }
+}
+
+bool Encoder::motion() {
+  return _motion_state;
 }
 
 long Encoder::read() {
