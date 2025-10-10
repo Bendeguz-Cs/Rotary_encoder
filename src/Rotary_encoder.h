@@ -12,6 +12,8 @@ class Encoder {
   public:
     Encoder(int CLK_PIN, int DT_PIN);
     void begin();
+    void setDebounceTime(int debounce_time);
+    bool motion();
     long read();
     long limitedRead(int Minval, int Maxval);
     long setPosition(int pos);
@@ -27,8 +29,10 @@ class Encoder {
     int _CLK_PIN;
     int _DT_PIN;
     int _scale;
+    bool _motion_state = false;
     volatile long position;
     volatile bool lastCLK;
+    int _debounce_time = 5;
     volatile unsigned long lastDebounceTime;
 
     void updateState();  // Private function to update the state
