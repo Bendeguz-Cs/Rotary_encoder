@@ -2,8 +2,6 @@ Encoder	KEYWORD1
 begin	KEYWORD2
 read	KEYWORD2
 limitedRead	KEYWORD2
-getMotion  KEYWORD2
-getDirection  KEYWORD2
 setPosition  KEYWORD2
 scale  KEYWORD2
 updateState  KEYWORD2
