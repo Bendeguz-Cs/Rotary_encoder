@@ -25,6 +25,7 @@ class Encoder {
     long read();
     long limitedRead(int Minval, int Maxval);
     long setPosition(int pos);
+    void setDirection(bool direction);
     void scale(int scale);
 
     // Linked list pointer for multiple encoders
@@ -39,6 +40,7 @@ class Encoder {
     int _scale;
     bool _motion_state = false;
     volatile bool feedbackMotion = false;
+    volatile int8_t _direction = 1; // -1 for CCW, +1 for CW
     volatile long position;
     volatile long lastPosition;
     volatile bool lastCLK;
