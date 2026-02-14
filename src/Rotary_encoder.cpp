@@ -42,39 +42,37 @@ void Encoder::setDebounceTime(int debounce_time) {
   _debounce_time = debounce_time;
 }
 
-void Encoder::updateState() {
-  bool newCLK = digitalRead(_CLK_PIN);
-  bool newDT = digitalRead(_DT_PIN);
+void IRAM_ATTR Encoder::updateState() {
+    bool newCLK = digitalRead(_CLK_PIN);
+    bool newDT  = digitalRead(_DT_PIN);
 
-  // Debounce check (5ms)
-  if ((millis() - lastDebounceTime) < _debounce_time) return;
-  lastDebounceTime = millis();
-
-  // Detect rotation on falling edge of CLK
-  if (newCLK == LOW && lastCLK == HIGH) {
-    if (newDT == HIGH) {
-      position += _scale;  // Clockwise
-    } else {
-      position -= _scale;  // Counterclockwise
+    if (newCLK == LOW && lastCLK == HIGH) {
+        if (newDT == HIGH) {
+            position += _scale;
+        } else {
+            position -= _scale;
+        }
+        _motion_state = true;   // Latch movement
     }
-    _motion_state = true;
-  } else {
-    _motion_state = false;
-  }
 
-  // Save last CLK state
-  lastCLK = newCLK;
+    lastCLK = newCLK;
 }
 
-void Encoder::globalEncoderISR() {
-  // Loop through all encoders and update their state
+void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
   for (Encoder* enc = encoderHead; enc != nullptr; enc = enc->next) {
     enc->updateState();
   }
 }
 
 bool Encoder::motion() {
-  return _motion_state;
+    bool state;
+
+    noInterrupts();          // prevent race condition
+    state = _motion_state;
+    _motion_state = false;    // clear after reading
+    interrupts();
+
+    return state;
 }
 
 long Encoder::read() {
