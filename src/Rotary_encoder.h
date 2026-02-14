@@ -8,6 +8,14 @@
 
 #include "Arduino.h"
 
+#if defined(ARDUINO_ARCH_ESP32)
+  #define ENCODER_ISR_ATTR IRAM_ATTR
+#elif defined(ARDUINO_ARCH_ESP8266)
+  #define ENCODER_ISR_ATTR ICACHE_RAM_ATTR
+#else
+  #define ENCODER_ISR_ATTR
+#endif
+
 class Encoder {
   public:
     Encoder(int CLK_PIN, int DT_PIN);
@@ -23,19 +31,20 @@ class Encoder {
     Encoder* next;
 
     // Static function for global ISR
-    static void globalEncoderISR();
+    static void ENCODER_ISR_ATTR globalEncoderISR();
 
   private:
     int _CLK_PIN;
     int _DT_PIN;
     int _scale;
-    bool _motion_state = false;
+    volatile bool _motion_state = false;
     volatile long position;
+    volatile long lastPosition;
     volatile bool lastCLK;
     int _debounce_time = 5;
     volatile unsigned long lastDebounceTime;
 
-    void updateState();  // Private function to update the state
+    void ENCODER_ISR_ATTR updateState();  // Private function to update the state
 };
 
 // Global linked list of encoders
