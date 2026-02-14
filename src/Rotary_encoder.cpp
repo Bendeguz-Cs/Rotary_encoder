@@ -42,7 +42,7 @@ void Encoder::setDebounceTime(int debounce_time) {
   _debounce_time = debounce_time;
 }
 
-void IRAM_ATTR Encoder::updateState() {
+/*void IRAM_ATTR Encoder::updateState() {
     bool newCLK = digitalRead(_CLK_PIN);
     bool newDT  = digitalRead(_DT_PIN);
 
@@ -56,7 +56,24 @@ void IRAM_ATTR Encoder::updateState() {
     }
 
     lastCLK = newCLK;
+}*/
+
+
+void IRAM_ATTR Encoder::updateState() {
+    bool clk = digitalRead(_CLK_PIN);
+    bool dt  = digitalRead(_DT_PIN);
+
+    if (clk == LOW && lastCLK == HIGH) {
+        position += (dt ? _scale : -_scale);
+        _motion_state = true;
+        feedbackMotion = true; // Set feedback flag
+    } else {
+        _motion_state = false;
+    }
+
+    lastCLK = clk;
 }
+
 
 void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
   for (Encoder* enc = encoderHead; enc != nullptr; enc = enc->next) {
@@ -65,14 +82,14 @@ void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
 }
 
 bool Encoder::motion() {
-    bool state;
+  bool state;
 
-    noInterrupts();          // prevent race condition
-    state = _motion_state;
-    _motion_state = false;    // clear after reading
-    interrupts();
+  noInterrupts();          // prevent race condition
+  state = feedbackMotion;    // read feedback flag
+  feedbackMotion = false;    // clear after reading
+  interrupts();
 
-    return state;
+  return state;
 }
 
 long Encoder::read() {
