@@ -64,7 +64,7 @@ void IRAM_ATTR Encoder::updateState() {
     bool dt  = digitalRead(_DT_PIN);
 
     if (clk == LOW && lastCLK == HIGH) {
-        position += (dt ? _scale : -_scale);
+        position += (dt ? _scale : -_scale) * _direction;
         _motion_state = true;
         feedbackMotion = true; // Set feedback flag
     } else {
@@ -108,6 +108,12 @@ long Encoder::limitedRead(int Minval, int Maxval) {
 long Encoder::setPosition(int pos) {
   position = pos;
   return position;
+}
+
+void Encoder::setDirection(bool direction) {
+  noInterrupts();
+  _direction = direction ? 1 : -1;
+  interrupts();
 }
 
 void Encoder::scale(int scale) {
