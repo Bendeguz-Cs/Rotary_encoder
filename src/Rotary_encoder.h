@@ -37,7 +37,8 @@ class Encoder {
     int _CLK_PIN;
     int _DT_PIN;
     int _scale;
-    volatile bool _motion_state = false;
+    bool _motion_state = false;
+    volatile bool feedbackMotion = false;
     volatile long position;
     volatile long lastPosition;
     volatile bool lastCLK;
