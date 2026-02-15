@@ -25,6 +25,8 @@ The library was tested on:
 
 - Seeeduino XIAO SAMD21
 
+- Seeeduino XIAO ESP32-S3
+
 </p>
 </details>
 
