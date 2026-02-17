@@ -22,6 +22,7 @@ class Encoder {
     void begin();
     void setDebounceTime(int debounce_time);
     bool motion();
+    bool lastMotionSince(int noMotionTime);
     long read();
     long limitedRead(int Minval, int Maxval);
     long setPosition(int pos);
@@ -41,6 +42,7 @@ class Encoder {
     bool _motion_state = false;
     volatile bool feedbackMotion = false;
     volatile int8_t _direction = 1; // -1 for CCW, +1 for CW
+    volatile long lastMotion;
     volatile long position;
     volatile long lastPosition;
     volatile bool lastCLK;
