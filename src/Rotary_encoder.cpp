@@ -16,10 +16,7 @@
 // Global pointer to the linked list of encoders
 Encoder* encoderHead = nullptr;
 
-Encoder::Encoder(int CLK_PIN, int DT_PIN)
-  : next(nullptr), _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0),
-    lastCLK(LOW), lastDebounceTime(0)
-{
+Encoder::Encoder(int CLK_PIN, int DT_PIN) : next(nullptr), _CLK_PIN(CLK_PIN), _DT_PIN(DT_PIN), _scale(1), position(0), lastCLK(LOW), lastDebounceTime(0) {
   // Add this encoder to the linked list
   next = encoderHead;
   encoderHead = this;
@@ -46,13 +43,26 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     bool clk = digitalRead(_CLK_PIN);
     bool dt  = digitalRead(_DT_PIN);
 
-    if (clk == LOW && lastCLK == HIGH) {
+    if (clk == LOW) {
+      if(lastCLK == HIGH) {
+        if ((millis() - lastDebounceTime) > _debounce_time) {
+          position += (dt ? _scale : -_scale) * _direction;
+          _motion_state = true;
+          feedbackMotion = true; // Set feedback flag
+          lastDebounceTime = millis();
+        }
+      }
+      
+    }
+    
+
+    /*if (clk == LOW && lastCLK == HIGH) {
         position += (dt ? _scale : -_scale) * _direction;
         _motion_state = true;
         feedbackMotion = true; // Set feedback flag
     } else {
         _motion_state = false;
-    }
+    }*/
 
     lastCLK = clk;
 }
