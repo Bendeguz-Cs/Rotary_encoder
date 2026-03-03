@@ -45,9 +45,9 @@ class Encoder {
     volatile long lastMotion;
     volatile long position;
     volatile long lastPosition;
-    volatile bool lastCLK;
+    volatile bool lastCLK = HIGH;
     int _debounce_time = 5;
-    volatile unsigned long lastDebounceTime;
+    volatile unsigned long lastDebounceTime = 0;
 
     void ENCODER_ISR_ATTR updateState();  // Private function to update the state
 };
