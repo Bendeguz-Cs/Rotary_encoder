@@ -42,7 +42,7 @@ void Encoder::setDebounceTime(int debounce_time) {
   _debounce_time = debounce_time;
 }
 
-void IRAM_ATTR Encoder::updateState() {
+void ENCODER_ISR_ATTR Encoder::updateState() {
     bool clk = digitalRead(_CLK_PIN);
     bool dt  = digitalRead(_DT_PIN);
 
