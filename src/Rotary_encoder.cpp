@@ -27,11 +27,13 @@ void Encoder::begin() {
   pinMode(_DT_PIN, INPUT_PULLUP);
   
   #if defined(ARDUINO_ARCH_AVR)
-    // Attach global ISR to the CLK pin
+    // Attach global ISR to the CLK and DT pins
     attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
+    attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(_DT_PIN),  globalEncoderISR, CHANGE);
   #else
-    // Attach global ISR to the CLK pin
+    // Attach global ISR to the CLK and DT pins
     attachInterrupt(digitalPinToInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(_DT_PIN),  globalEncoderISR, CHANGE);
   #endif
 }
 
@@ -43,19 +45,46 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     bool clk = digitalRead(_CLK_PIN);
     bool dt  = digitalRead(_DT_PIN);
 
-    // Only act when CLK rises back to HIGH after being LOW
-    if (clk == HIGH && lastCLK == LOW) {
-        if ((millis() - lastDebounceTime) > _debounce_time) {
-            position += (dt ? -_scale : _scale) * _direction;
-            _motion_state = true;
-            feedbackMotion = true;
-            lastDebounceTime = millis();
-        } else {
-            _motion_state = false;
-        }
+    uint8_t currentState = (clk << 1) | dt;
+    uint8_t lastState    = (lastCLK << 1) | _lastDT;
+
+    int8_t delta = 0;
+
+    // Valid quadrature transitions
+    if ((lastState == 0b00 && currentState == 0b01) ||
+        (lastState == 0b01 && currentState == 0b11) ||
+        (lastState == 0b11 && currentState == 0b10) ||
+        (lastState == 0b10 && currentState == 0b00)) {
+        delta = 1;
+    }
+    else if ((lastState == 0b00 && currentState == 0b10) ||
+             (lastState == 0b10 && currentState == 0b11) ||
+             (lastState == 0b11 && currentState == 0b01) ||
+             (lastState == 0b01 && currentState == 0b00)) {
+        delta = -1;
+    }
+
+    _quadState += delta;
+
+    // Only count after full 4-step cycle
+    if (_quadState >= 4) {
+        position -= _scale * _direction;
+        _quadState = 0;
+        _motion_state = true;
+        feedbackMotion = true;
+    }
+    else if (_quadState <= -4) {
+        position += _scale * _direction;
+        _quadState = 0;
+        _motion_state = true;
+        feedbackMotion = true;
+    }
+    else {
+        _motion_state = false;
     }
 
     lastCLK = clk;
+    _lastDT = dt;
 }
 
 void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
