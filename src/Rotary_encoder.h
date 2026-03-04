@@ -46,7 +46,7 @@ class Encoder {
     volatile long position;
     volatile long lastPosition;
     volatile bool lastCLK = HIGH;
-    int _debounce_time = 5;
+    int _debounce_time = 5; // Default debounce time in milliseconds
     volatile unsigned long lastDebounceTime = 0;
 
     void ENCODER_ISR_ATTR updateState();  // Private function to update the state
