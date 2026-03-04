@@ -28,10 +28,10 @@ void Encoder::begin() {
   
   #if defined(ARDUINO_ARCH_AVR)
     // Attach global ISR to the CLK pin
-    attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(_CLK_PIN), globalEncoderISR, FALLING);//set to falling!
+    attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
   #else
     // Attach global ISR to the CLK pin
-    attachInterrupt(digitalPinToInterrupt(_CLK_PIN), globalEncoderISR, FALLING); //set to falling!
+    attachInterrupt(digitalPinToInterrupt(_CLK_PIN), globalEncoderISR, CHANGE);
   #endif
 }
 
@@ -43,20 +43,20 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     bool clk = digitalRead(_CLK_PIN);
     bool dt  = digitalRead(_DT_PIN);
 
-    if (clk == LOW) {
-      if ((millis() - lastDebounceTime) > _debounce_time) {
-          position += (dt ? _scale : -_scale) * _direction;
-          _motion_state = true;
-          feedbackMotion = true; // Set feedback flag
-          lastDebounceTime = millis();
-      } else {
-          _motion_state = false;
-      }
+    // Only act when CLK rises back to HIGH after being LOW
+    if (clk == HIGH && lastCLK == LOW) {
+        if ((millis() - lastDebounceTime) > _debounce_time) {
+            position += (dt ? -_scale : _scale) * _direction;
+            _motion_state = true;
+            feedbackMotion = true;
+            lastDebounceTime = millis();
+        } else {
+            _motion_state = false;
+        }
     }
 
     lastCLK = clk;
 }
-
 
 void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
   for (Encoder* enc = encoderHead; enc != nullptr; enc = enc->next) {
