@@ -13,6 +13,5 @@ void loop() {
   if (encoder.motion()) {  //check for motion - only print when there is a change in position
     //print the read value of the encoder
     Serial.println(encoder.read());
-    delay(100); //delay to only print output once
   }
 }
