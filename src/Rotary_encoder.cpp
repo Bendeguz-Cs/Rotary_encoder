@@ -42,49 +42,57 @@ void Encoder::setDebounceTime(int debounce_time) {
 }
 
 void ENCODER_ISR_ATTR Encoder::updateState() {
-    bool clk = digitalRead(_CLK_PIN);
-    bool dt  = digitalRead(_DT_PIN);
+  bool clk = digitalRead(_CLK_PIN);
+  bool dt  = digitalRead(_DT_PIN);
 
-    uint8_t currentState = (clk << 1) | dt;
-    uint8_t lastState    = (lastCLK << 1) | _lastDT;
+  uint8_t currentState = (clk << 1) | dt;
+  uint8_t lastState    = (lastCLK << 1) | _lastDT;
 
-    int8_t delta = 0;
+  int8_t delta = 0;
 
-    // Valid quadrature transitions
-    if ((lastState == 0b00 && currentState == 0b01) ||
-        (lastState == 0b01 && currentState == 0b11) ||
-        (lastState == 0b11 && currentState == 0b10) ||
-        (lastState == 0b10 && currentState == 0b00)) {
-        delta = 1;
+  // Valid quadrature transitions
+  if ((lastState == 0b00 && currentState == 0b01) ||
+      (lastState == 0b01 && currentState == 0b11) ||
+      (lastState == 0b11 && currentState == 0b10) ||
+      (lastState == 0b10 && currentState == 0b00)) {
+      delta = 1;
+  }
+  else if ((lastState == 0b00 && currentState == 0b10) ||
+            (lastState == 0b10 && currentState == 0b11) ||
+            (lastState == 0b11 && currentState == 0b01) ||
+            (lastState == 0b01 && currentState == 0b00)) {
+    delta = -1;
+  }
+
+  _quadState += delta;
+
+  // Only count after full 4-step cycle
+  if (_quadState >= 4) {
+    if (limitsEnabled) {
+      position = constrain(position - _scale * _direction, _MinLimit, _MaxLimit);
+    } else {
+      position -= _scale * _direction;
     }
-    else if ((lastState == 0b00 && currentState == 0b10) ||
-             (lastState == 0b10 && currentState == 0b11) ||
-             (lastState == 0b11 && currentState == 0b01) ||
-             (lastState == 0b01 && currentState == 0b00)) {
-        delta = -1;
+    _quadState = 0;
+    _motion_state = true;
+    feedbackMotion = true;
+  }
+  else if (_quadState <= -4) {
+    if (limitsEnabled) {
+      position = constrain(position + _scale * _direction, _MinLimit, _MaxLimit);
+    } else {
+      position += _scale * _direction;
     }
+    _quadState = 0;
+    _motion_state = true;
+    feedbackMotion = true;
+  }
+  else {
+    _motion_state = false;
+  }
 
-    _quadState += delta;
-
-    // Only count after full 4-step cycle
-    if (_quadState >= 4) {
-        position -= _scale * _direction;
-        _quadState = 0;
-        _motion_state = true;
-        feedbackMotion = true;
-    }
-    else if (_quadState <= -4) {
-        position += _scale * _direction;
-        _quadState = 0;
-        _motion_state = true;
-        feedbackMotion = true;
-    }
-    else {
-        _motion_state = false;
-    }
-
-    lastCLK = clk;
-    _lastDT = dt;
+  lastCLK = clk;
+  _lastDT = dt;
 }
 
 void ENCODER_ISR_ATTR Encoder::globalEncoderISR() {
@@ -120,14 +128,29 @@ long Encoder::read() {
   return position;
 }
 
-long Encoder::limitedRead(int Minval, int Maxval) {
-  position = constrain(position, Minval, Maxval);
-  return position;
+void Encoder::limits() {
+  limitsEnabled = true;
 }
 
-long Encoder::setPosition(int pos) {
+void Encoder::noLimits() {
+  limitsEnabled = false;
+}
+
+void Encoder::setMin(long Minval) {
+  _MinLimit = Minval;
+}
+
+void Encoder::setMax(long Maxval) {
+  _MaxLimit = Maxval;
+}
+
+void Encoder::setLimits(long Minval, long Maxval) {
+  _MinLimit = Minval;
+  _MaxLimit = Maxval;
+}
+
+void Encoder::setPosition(int pos) {
   position = pos;
-  return position;
 }
 
 void Encoder::setDirection(bool direction) {
@@ -137,5 +160,5 @@ void Encoder::setDirection(bool direction) {
 }
 
 void Encoder::scale(int scale) {
-  _scale = constrain(scale, 1, 100000);
+  _scale = constrain(scale, 1, 2147183647); // prevent overflow
 }
