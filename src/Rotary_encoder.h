@@ -24,8 +24,12 @@ class Encoder {
     bool motion();
     bool lastMotionSince(int noMotionTime);
     long read();
-    long limitedRead(int Minval, int Maxval);
-    long setPosition(int pos);
+    void limits();
+    void noLimits();
+    void setMin(long Minval);
+    void setMax(long Maxval);
+    void setLimits(long Minval, long Maxval);
+    void setPosition(int pos);
     void setDirection(bool direction);
     void scale(int scale);
 
@@ -44,6 +48,9 @@ class Encoder {
     volatile int8_t _direction = 1; // -1 for CCW, +1 for CW
     volatile long lastMotion;
     volatile long position;
+    volatile bool limitsEnabled = false;
+    volatile long _MinLimit;
+    volatile long _MaxLimit;
     volatile long lastPosition;
     volatile bool lastCLK = HIGH;
     volatile bool _lastDT = HIGH;
