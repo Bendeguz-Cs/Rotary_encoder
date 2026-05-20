@@ -16,7 +16,7 @@ Recommended hardware debouncing using a 10 KΩ resistor between the MCU pin and 
 > [!NOTE]
 > The KY-040 has the resistors built in, you don't need to add external ones
 
-<img width="500" height="780" alt="image" src="https://github.com/user-attachments/assets/a9f15062-2125-424d-ad24-a0ce12119c01" />
+<img width="500" height="480" alt="image" src="https://github.com/user-attachments/assets/a9f15062-2125-424d-ad24-a0ce12119c01" />
 
 ---
 
