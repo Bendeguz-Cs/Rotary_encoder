@@ -13,6 +13,10 @@ Simple Arduino library used to read the position of an incremental rotary encode
 
 Recommended hardware debouncing using a 10 KΩ resistor between the MCU pin and the CLK pin of the encoder(the pin defined first in the initialization) and a 100nF(0.1μF) capacitor between the MCU pin and GND. See below.
 
+I've designed my own board with 20 NeoPixel LEDs, the pullup resistors and the debounce capacitors built in, you can order it from [PCBWay](https://www.pcbway.com/project/shareproject/Rotary_encoder_w_LED_ring_6f54efc7.html).
+<img width="500" height="375" alt="IMG_0918" src="https://github.com/user-attachments/assets/013f8fd3-0ebf-4416-8a27-0f070234232f" />
+
+
 > [!NOTE]
 > The KY-040 has the resistors built in, you don't need to add external ones
 
