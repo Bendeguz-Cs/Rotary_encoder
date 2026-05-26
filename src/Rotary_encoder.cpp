@@ -37,6 +37,101 @@ void Encoder::begin() {
   #endif
 }
 
+void Encoder::LEDRing(int ledPin, uint16_t ledCount) {
+  _LED_PIN = ledPin;
+  _LED_COUNT = ledCount;
+
+  useLEDRing = true;
+  #ifdef USE_LED_RING
+    // If a ring exists, delete it first
+    if (ring != nullptr) {
+      delete ring;
+      ring = nullptr;
+    }
+
+    // Allocate a per-instance NeoPixel and initialize it
+    ring = new Adafruit_NeoPixel(_LED_COUNT, _LED_PIN, NEO_GRB + NEO_KHZ800);
+    if (ring != nullptr) {
+      ring->begin();
+      ring->clear();
+      ring->show();
+    }
+  #endif
+}
+
+#ifdef USE_LED_RING
+void Encoder::positionDotPattern(byte red, byte green, byte blue) {
+  if (!useLEDRing || ring == nullptr) return;
+
+  _patternRed = red;
+  _patternGreen = green;
+  _patternBlue = blue;
+  _activePattern = POSITION_DOT_PATTERN;
+
+  ring->clear();
+  int index = position % _LED_COUNT;
+  if (index < 0) index += _LED_COUNT; // Handle negative positions
+  ring->setPixelColor(index, ring->Color(red, green, blue));
+  ring->show();
+}
+
+void Encoder::fillBarPattern(byte red, byte green, byte blue) {
+  if (!useLEDRing || ring == nullptr) return;
+
+  _patternRed = red;
+  _patternGreen = green;
+  _patternBlue = blue;
+  _activePattern = FILL_BAR_PATTERN;
+
+  ring->clear();
+  int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+  count = constrain(count, 0, _LED_COUNT);
+  for (int i = 0; i < count; i++) {
+    ring->setPixelColor(i, ring->Color(red, green, blue));
+  }
+  ring->show();
+}
+
+void Encoder::noPattern() {
+  _activePattern = NO_PATTERN;
+  if (useLEDRing && ring != nullptr) {
+    ring->clear();
+    ring->show();
+  }
+}
+
+void Encoder::_updatePattern() {
+  if (!useLEDRing || ring == nullptr) return;
+
+  switch (_activePattern) {
+    case POSITION_DOT_PATTERN: {
+      ring->clear();
+      int index = position % _LED_COUNT;
+      if (index < 0) index += _LED_COUNT;
+      ring->setPixelColor(index, ring->Color(_patternRed, _patternGreen, _patternBlue));
+      ring->show();
+      break;
+    }
+    case FILL_BAR_PATTERN: {
+      ring->clear();
+      int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+      count = constrain(count, 0, _LED_COUNT);
+      for (int i = 0; i < count; i++) {
+        ring->setPixelColor(i, ring->Color(_patternRed, _patternGreen, _patternBlue));
+      }
+      ring->show();
+      break;
+    }
+    case NO_PATTERN: {
+      break;
+    }
+    default: {
+      break;
+    }
+  }
+}
+#endif
+
 void Encoder::setDebounceTime(int debounce_time) {
   _debounce_time = debounce_time;
 }
@@ -76,6 +171,9 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     _quadState = 0;
     _motion_state = true;
     feedbackMotion = true;
+    #ifdef USE_LED_RING
+      _updatePattern();
+    #endif
   }
   else if (_quadState <= -4) {
     if (limitsEnabled) {
@@ -86,6 +184,9 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     _quadState = 0;
     _motion_state = true;
     feedbackMotion = true;
+    #ifdef USE_LED_RING
+      _updatePattern();
+    #endif
   }
   else {
     _motion_state = false;
