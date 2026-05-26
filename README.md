@@ -20,9 +20,15 @@ Recommended hardware debouncing using a 10 KΩ resistor between the MCU pin and 
 
 ---
 
-I've designed my own board with 20 NeoPixel LEDs, the pullup resistors and the debounce capacitors built in, you can order it from [PCBWay](https://www.pcbway.com/project/shareproject/Rotary_encoder_w_LED_ring_6f54efc7.html).
+I've designed my own board with 20 NeoPixel LEDs, the pullup resistors and the debounce capacitors built in, you can order it or download the design files from [PCBWay](https://www.pcbway.com/project/shareproject/Rotary_encoder_w_LED_ring_6f54efc7.html).
 
 <img width="500" height="375" alt="IMG_0918" src="https://github.com/user-attachments/assets/013f8fd3-0ebf-4416-8a27-0f070234232f" />
+
+## Sponsorship
+
+Special thanks to PCBWay for sponsoring the production of the prototype boards used in this project.
+
+<img width="169" height="51" alt="image" src="https://github.com/user-attachments/assets/cadc9b50-77c6-4b7f-9263-1af4391e1b8d" />
 
 ---
 
