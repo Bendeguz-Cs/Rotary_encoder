@@ -8,9 +8,13 @@ void setup() {
   //initialize
   encoder.begin();
 
+  //set the limits
+  encoder.setLimits(0, 10);
+  //enable limiting
+  encoder.limits();
 }
 
 void loop() {
   //print the value constrained between 0 and 10 to the Serial monitor
-  Serial.println(encoder.limitedRead(0, 10));
+  Serial.println(encoder.read());
 }
