@@ -29,7 +29,9 @@
   enum PatternMode {
     NO_PATTERN,
     POSITION_DOT_PATTERN,
-    FILL_BAR_PATTERN
+    FILL_BAR_PATTERN,
+    GRADIENT_BAR_PATTERN,
+    FIXED_GRADIENT_BAR_PATTERN
   };
 #endif
 
@@ -41,6 +43,8 @@ class Encoder {
     #ifdef USE_LED_RING
       void positionDotPattern(byte red, byte green, byte blue);
       void fillBarPattern(byte red, byte green, byte blue);
+      void gradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue);
+      void fixedGradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue);
       void noPattern();
     #endif
     void setDebounceTime(int debounce_time);
@@ -67,7 +71,7 @@ class Encoder {
     int _DT_PIN;
     int _LED_PIN;
     int _LED_COUNT;
-    bool useLEDRing = false;
+    bool useLEDRing = false;  //Flag to indicate if the LED ring is used by the current instance
     #ifdef USE_LED_RING
       Adafruit_NeoPixel* ring = nullptr; // per-instance NeoPixel
     #endif
@@ -90,6 +94,9 @@ class Encoder {
     #ifdef USE_LED_RING
       PatternMode _activePattern = NO_PATTERN;
       byte _patternRed = 255, _patternGreen = 255, _patternBlue = 255;
+      // Gradient endpoints for GRADIENT_BAR_PATTERN
+      byte _gradStartR = 255, _gradStartG = 0, _gradStartB = 0;
+      byte _gradEndR = 0, _gradEndG = 255, _gradEndB = 0;
       void _updatePattern();
     #endif
 
