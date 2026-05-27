@@ -92,6 +92,61 @@ void Encoder::fillBarPattern(byte red, byte green, byte blue) {
   ring->show();
 }
 
+void Encoder::gradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue) {
+  if (!useLEDRing || ring == nullptr) return;
+
+  // Store gradient endpoints and select gradient mode
+  _gradStartR = startRed;
+  _gradStartG = startGreen;
+  _gradStartB = startBlue;
+  _gradEndR = endRed;
+  _gradEndG = endGreen;
+  _gradEndB = endBlue;
+  _activePattern = GRADIENT_BAR_PATTERN;
+
+  // Render initial gradient based on current position
+  ring->clear();
+  int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+  count = constrain(count, 0, _LED_COUNT);
+
+  for (int i = 0; i < count; i++) {
+    float t = count > 1 ? float(i) / float(count - 1) : 0; // Avoid division by zero
+    byte r = _gradStartR + t * (_gradEndR - _gradStartR);
+    byte g = _gradStartG + t * (_gradEndG - _gradStartG);
+    byte b = _gradStartB + t * (_gradEndB - _gradStartB);
+    ring->setPixelColor(i, ring->Color(r, g, b));
+  }
+  ring->show();
+}
+
+void Encoder::fixedGradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue) {
+  if (!useLEDRing || ring == nullptr) return;
+
+  // Store gradient endpoints and select fixed gradient mode
+  _gradStartR = startRed;
+  _gradStartG = startGreen;
+  _gradStartB = startBlue;
+  _gradEndR = endRed;
+  _gradEndG = endGreen;
+  _gradEndB = endBlue;
+  _activePattern = FIXED_GRADIENT_BAR_PATTERN;
+
+  // Render initial fixed gradient showing count based on current position
+  ring->clear();
+  int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+  count = constrain(count, 0, _LED_COUNT);
+
+  for (int i = 0; i < _LED_COUNT; i++) {
+    float t = _LED_COUNT > 1 ? float(i) / float(_LED_COUNT - 1) : 0;
+    byte r = _gradStartR + t * (_gradEndR - _gradStartR);
+    byte g = _gradStartG + t * (_gradEndG - _gradStartG);
+    byte b = _gradStartB + t * (_gradEndB - _gradStartB);
+    if (i < count) ring->setPixelColor(i, ring->Color(r, g, b));
+    else ring->setPixelColor(i, 0);
+  }
+  ring->show();
+}
+
 void Encoder::noPattern() {
   _activePattern = NO_PATTERN;
   if (useLEDRing && ring != nullptr) {
@@ -118,6 +173,35 @@ void Encoder::_updatePattern() {
       count = constrain(count, 0, _LED_COUNT);
       for (int i = 0; i < count; i++) {
         ring->setPixelColor(i, ring->Color(_patternRed, _patternGreen, _patternBlue));
+      }
+      ring->show();
+      break;
+    }
+    case GRADIENT_BAR_PATTERN: {
+      ring->clear();
+      int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+      count = constrain(count, 0, _LED_COUNT);
+      for (int i = 0; i < count; i++) {
+        float t = count > 1 ? float(i) / float(count - 1) : 0;
+        byte r = _gradStartR + t * (_gradEndR - _gradStartR);
+        byte g = _gradStartG + t * (_gradEndG - _gradStartG);
+        byte b = _gradStartB + t * (_gradEndB - _gradStartB);
+        ring->setPixelColor(i, ring->Color(r, g, b));
+      }
+      ring->show();
+      break;
+    }
+    case FIXED_GRADIENT_BAR_PATTERN: {
+      ring->clear();
+      int count = map(position, _MinLimit, _MaxLimit, 0, _LED_COUNT);
+      count = constrain(count, 0, _LED_COUNT);
+      for (int i = 0; i < _LED_COUNT; i++) {
+        float t = _LED_COUNT > 1 ? float(i) / float(_LED_COUNT - 1) : 0;
+        byte r = _gradStartR + t * (_gradEndR - _gradStartR);
+        byte g = _gradStartG + t * (_gradEndG - _gradStartG);
+        byte b = _gradStartB + t * (_gradEndB - _gradStartB);
+        if (i < count) ring->setPixelColor(i, ring->Color(r, g, b));
+        else ring->setPixelColor(i, 0);
       }
       ring->show();
       break;
