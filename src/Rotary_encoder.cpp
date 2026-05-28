@@ -119,6 +119,10 @@ void Encoder::gradientBarPattern(byte startRed, byte startGreen, byte startBlue,
   ring->show();
 }
 
+Adafruit_NeoPixel* Encoder::getRing() {
+  return ring;
+}
+
 void Encoder::fixedGradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue) {
   if (!useLEDRing || ring == nullptr) return;
 
