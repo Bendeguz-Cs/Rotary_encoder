@@ -41,6 +41,7 @@ class Encoder {
     void begin();
     void LEDRing(int ledPin, uint16_t ledCount);
     #ifdef USE_LED_RING
+      Adafruit_NeoPixel* getRing();
       void positionDotPattern(byte red, byte green, byte blue);
       void fillBarPattern(byte red, byte green, byte blue);
       void gradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue);
