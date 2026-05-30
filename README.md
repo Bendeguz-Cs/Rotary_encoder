@@ -27,6 +27,7 @@ I've designed my own board with 20 NeoPixel LEDs, the pullup resistors and the d
 ## Sponsorship
 
 Special thanks to PCBWay for sponsoring the production of the prototype boards used in this project.
+Make sure to check out their services at [pcbway.com](https://www.pcbway.com/).
 
 <img width="169" height="51" alt="image" src="https://github.com/user-attachments/assets/cadc9b50-77c6-4b7f-9263-1af4391e1b8d" />
 
