@@ -260,7 +260,9 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     _motion_state = true;
     feedbackMotion = true;
     #ifdef USE_LED_RING
-      _updatePattern();
+      #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_MEGAAVR)
+        _updatePattern();
+      #endif
     #endif
   }
   else if (_quadState <= -4) {
@@ -273,7 +275,9 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     _motion_state = true;
     feedbackMotion = true;
     #ifdef USE_LED_RING
-      _updatePattern();
+      #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_MEGAAVR)
+        _updatePattern();
+      #endif
     #endif
   }
   else {
