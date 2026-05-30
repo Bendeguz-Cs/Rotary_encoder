@@ -29,6 +29,13 @@ jobs:
           arduino-cli core install arduino:megaavr
           arduino-cli core install arduino:samd
           arduino-cli core install esp32:esp32
+          
+      - name: Install ESP32 core
+        run: |
+          arduino-cli config init
+          arduino-cli config set board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install arduino:esp32
       
       - name: Compile examples
         run: |
