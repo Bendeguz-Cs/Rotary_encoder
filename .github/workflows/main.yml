@@ -14,7 +14,6 @@ jobs:
           - arduino:avr:nano
           - arduino:avr:uno
           - arduino:megaavr:uno2018:mode=on
-          - arduino:samd:seeed_xiao_m0
     
     steps:
       - uses: actions/checkout@v3
