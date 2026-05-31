@@ -101,6 +101,8 @@ class Encoder {
       // Gradient endpoints for GRADIENT_BAR_PATTERN
       byte _gradStartR = 255, _gradStartG = 0, _gradStartB = 0;
       byte _gradEndR = 0, _gradEndG = 255, _gradEndB = 0;
+      const int _minUpdateInterval = 5; // Minimum interval between pattern updates in milliseconds
+      volatile unsigned long _lastPatternUpdate = 0;
       void _updatePattern();
     #endif
 
