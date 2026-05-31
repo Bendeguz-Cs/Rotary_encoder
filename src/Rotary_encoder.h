@@ -62,7 +62,7 @@ class Encoder {
     void setDirection(bool direction);
     bool getDirection();
     void scale(int scale);
-    void limitedRead(int minVal, int maxVal); //old function for compatibility
+    long limitedRead(int minVal, int maxVal); //old function for compatibility
 
     // Linked list pointer for multiple encoders
     Encoder* next;
