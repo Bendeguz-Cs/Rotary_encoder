@@ -46,6 +46,7 @@ class Encoder {
       void fillBarPattern(byte red, byte green, byte blue);
       void gradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue);
       void fixedGradientBarPattern(byte startRed, byte startGreen, byte startBlue, byte endRed, byte endGreen, byte endBlue);
+      void updatePattern();
       void noPattern();
     #endif
     void setDebounceTime(int debounce_time);
@@ -60,6 +61,7 @@ class Encoder {
     void setPosition(int pos);
     void setDirection(bool direction);
     void scale(int scale);
+    void limitedRead(int minVal, int maxVal); //old function for compatibility
 
     // Linked list pointer for multiple encoders
     Encoder* next;
