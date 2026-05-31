@@ -166,6 +166,12 @@ void Encoder::updatePattern() {
 void Encoder::_updatePattern() {
   if (!useLEDRing || ring == nullptr) return;
 
+  if (millis() - _lastPatternUpdate >= _minUpdateInterval) {
+    _lastPatternUpdate = millis();
+  } else {
+    return; // Skip update if minimum interval has not passed
+  }
+
   switch (_activePattern) {
     case POSITION_DOT_PATTERN: {
       ring->clear();
