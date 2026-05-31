@@ -361,6 +361,10 @@ void Encoder::setDirection(bool direction) {
   interrupts();
 }
 
+bool Encoder::getDirection() {
+  return _direction;
+}
+
 void Encoder::scale(int scale) {
   _scale = constrain(scale, 1, 2147183647); // prevent overflow
 }
