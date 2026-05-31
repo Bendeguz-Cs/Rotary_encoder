@@ -369,8 +369,8 @@ void Encoder::scale(int scale) {
   _scale = constrain(scale, 1, 2147183647); // prevent overflow
 }
 
-void Encoder::limitedRead(int minVal, int maxVal) { //old function for compatibility
+long Encoder::limitedRead(int minVal, int maxVal) { //old function for compatibility
   setLimits(minVal, maxVal);
   limits();
-  //return read();
+  return read();
 }
