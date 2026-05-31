@@ -60,6 +60,7 @@ class Encoder {
     void setLimits(long Minval, long Maxval);
     void setPosition(int pos);
     void setDirection(bool direction);
+    bool getDirection();
     void scale(int scale);
     void limitedRead(int minVal, int maxVal); //old function for compatibility
 
