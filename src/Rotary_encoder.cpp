@@ -159,6 +159,10 @@ void Encoder::noPattern() {
   }
 }
 
+void Encoder::updatePattern() {
+  _updatePattern();
+}
+
 void Encoder::_updatePattern() {
   if (!useLEDRing || ring == nullptr) return;
 
@@ -275,7 +279,7 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     _motion_state = true;
     feedbackMotion = true;
     #ifdef USE_LED_RING
-      #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_MEGAAVR)
+      #if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD) || defined(ARDUINO_ARCH_SAM) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_MEGAAVR)  //check for bare-metal(no OS running in the beackground) board
         _updatePattern();
       #endif
     #endif
@@ -318,6 +322,11 @@ bool Encoder::lastMotionSince(int noMotionTime) {
 }
 
 long Encoder::read() {
+  #ifdef USE_LED_RING
+    #if !defined(ARDUINO_ARCH_AVR) && !defined(ARDUINO_ARCH_SAMD) && !defined(ARDUINO_ARCH_SAM) && !defined(ARDUINO_ARCH_RP2040) && !defined(ARDUINO_ARCH_STM32) && !defined(ARDUINO_ARCH_MEGAAVR)  //check for NOT bare-metal(no OS running in the beackground) board
+      _updatePattern(); // Ensure pattern is updated with the latest position before returning
+    #endif
+  #endif
   return position;
 }
 
@@ -354,4 +363,10 @@ void Encoder::setDirection(bool direction) {
 
 void Encoder::scale(int scale) {
   _scale = constrain(scale, 1, 2147183647); // prevent overflow
+}
+
+void Encoder::limitedRead(int minVal, int maxVal) { //old function for compatibility
+  setLimits(minVal, maxVal);
+  limits();
+  //return read();
 }
