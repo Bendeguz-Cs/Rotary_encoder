@@ -27,6 +27,7 @@ I've designed my own board with 20 NeoPixel LEDs, the pullup resistors and the d
 ## Sponsorship
 
 Special thanks to PCBWay for sponsoring the production of the prototype boards used in this project.
+The boards would have cost 6.88$ a piece including the 20 WS2812 SMD LEDs(NeoPixels), assembly and shipping costs, which was approx. 20$ for all 10 boards, coming to a total of approx 4.8$ per board. I am very happy with the quality of the boards, they turned out great and have made it a lot easier to make most experiments, as they provide the already very versatile rotary encoder and a useful display around it, without requiring any external components, everything is on the board so you can make prototyping a lot faster.
 Make sure to check out their services at [pcbway.com](https://www.pcbway.com/).
 
 <img width="169" height="51" alt="image" src="https://github.com/user-attachments/assets/cadc9b50-77c6-4b7f-9263-1af4391e1b8d" />
