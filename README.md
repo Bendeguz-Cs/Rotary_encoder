@@ -7,7 +7,7 @@ Reads the position of a rotary encoder and outputs it with a simple function.
 Simple Arduino library used to read the position of an incremental rotary encoder.
 
 > [!NOTE]
-> Version [2.0.0](https://github.com/Bendeguz-Cs/Rotary_encoder/releases/tag/v2.0.0) and newer use interrupts, if an **AVR** chip is selected then the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used, for all other chips **Hardware interrupts** will be used 
+> Version [2.0.0](https://github.com/Bendeguz-Cs/Rotary_encoder/releases/tag/v2.0.0) and newer use interrupts, if an **AVR** architecture is selected then the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used, for all other chips **Hardware interrupts** will be used 
 
 ## Hardware
 
