@@ -1,6 +1,7 @@
 # Rotary_encoder
 
 Reads the position of a rotary encoder and outputs it with a simple function.
+Also has native NeoPixel ring support with automatic graphics and diaplay refresh. 
 
 ## Description
 
