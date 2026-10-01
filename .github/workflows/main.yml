@@ -7,43 +7,41 @@ on:
 jobs:
   compile:
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         board:
           - arduino:avr:nano
           - arduino:avr:uno
           - arduino:megaavr:uno2018:mode=on
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Set up Arduino CLI
-        uses: arduino/setup-arduino-cli@v1
-      
+        uses: arduino/setup-arduino-cli@v2
+        with:
+          version: "1.x"
+
       - name: Install board support
         run: |
           arduino-cli core install arduino:avr
           arduino-cli core install arduino:megaavr
-          arduino-cli core install arduino:samd
-          arduino-cli core install esp32:esp32
-          
-      - name: Install ESP32 core
+
+      - name: Install library dependencies
         run: |
-          arduino-cli config init
-          arduino-cli config set board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
-          arduino-cli core update-index
-          arduino-cli core install arduino:esp32
-      
+          arduino-cli lib update-index
+          arduino-cli lib install "PinChangeInterrupt" "Adafruit NeoPixel"
+
       - name: Compile examples
         run: |
           failed=0
           for example in examples/*/*.ino; do
-            echo "::group::Compiling $(basename $example) for ${{ matrix.board }}"
-            if ! arduino-cli compile --fqbn ${{ matrix.board }} "$(dirname $example)"; then
-              echo "::error::Failed to compile $(basename $example)"
+            echo "::group::Compiling $(basename "$example") for ${{ matrix.board }}"
+            if ! arduino-cli compile --fqbn "${{ matrix.board }}" --library . "$(dirname "$example")"; then
+              echo "::error::Failed to compile $(basename "$example")"
               failed=1
             fi
             echo "::endgroup::"
           done
-          exit $failed
+          exit "$failed"
