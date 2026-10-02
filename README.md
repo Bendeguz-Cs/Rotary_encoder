@@ -38,7 +38,7 @@ Make sure to check out their services at [pcbway.com](https://www.pcbway.com/).
 <details><summary>Compatibility</summary>
 <p>
 
-This library is compatible with **AVR** and all other **MCU**s that have **Hardware interrupts**.
+This library is compatible with **AVR** and all other architectures that have **Hardware interrupts**.
 The library was tested on:
 
 - Arduino NANO
