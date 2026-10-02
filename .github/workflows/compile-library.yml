@@ -1,0 +1,55 @@
+name: Compile Library Source
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  compile-library:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        board:
+          - arduino:avr:uno
+          - esp32:esp32:esp32
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+        with:
+          version: "1.x"
+
+      - name: Install board support
+        run: |
+          arduino-cli core install arduino:avr
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32
+
+      - name: Install library dependencies
+        run: |
+          arduino-cli lib update-index
+          arduino-cli lib install "PinChangeInterrupt" "Adafruit NeoPixel"
+
+      - name: Create library compile test
+        run: |
+          mkdir -p build/library_compile_test
+          cat > build/library_compile_test/library_compile_test.ino <<'EOF'
+          #include <Rotary_encoder.h>
+
+          void setup() {
+          }
+
+          void loop() {
+          }
+          EOF
+
+      - name: Compile library source
+        run: |
+          arduino-cli compile \
+            --fqbn "${{ matrix.board }}" \
+            --library . \
+            build/library_compile_test
