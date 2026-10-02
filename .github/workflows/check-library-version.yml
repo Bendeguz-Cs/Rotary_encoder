@@ -1,0 +1,46 @@
+name: Check Library Version
+
+on:
+  push:
+    tags:
+      - '**'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out tagged version
+        uses: actions/checkout@v4
+
+      - name: Check library.properties version
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME}"
+
+          # Only validate exact vMAJOR.MINOR.PATCH tags.
+          # Tags with suffixes such as -alpha are intentionally ignored.
+          if [[ ! "$tag" =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
+            echo "Ignoring tag '$tag' because it is not an exact vMAJOR.MINOR.PATCH tag."
+            exit 0
+          fi
+
+          tag_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
+
+          # Read the version field from library.properties.
+          properties_version="$(sed -nE 's/^version=([0-9]+\.[0-9]+\.[0-9]+)[[:space:]]*$/\1/p' library.properties | head -n 1)"
+
+          if [[ -z "$properties_version" ]]; then
+            echo "::error::Could not find a valid version=MAJOR.MINOR.PATCH entry in library.properties."
+            exit 1
+          fi
+
+          echo "Tag version:        $tag_version"
+          echo "library.properties: $properties_version"
+
+          if [[ "$tag_version" != "$properties_version" ]]; then
+            echo "::error::Version mismatch: tag is '$tag', but library.properties contains version '$properties_version'."
+            exit 1
+          fi
+
+          echo "Version check passed."
