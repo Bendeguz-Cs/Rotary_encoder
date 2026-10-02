@@ -13,6 +13,8 @@ jobs:
         board:
           - arduino:avr:uno
           - esp32:esp32:esp32
+          - rp2040:rp2040:rpipico
+          - rp2040:rp2040:rpipico2
 
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +28,10 @@ jobs:
         run: |
           arduino-cli core install arduino:avr
           arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli config add board_manager.additional_urls https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
           arduino-cli core update-index
           arduino-cli core install esp32:esp32
+          arduino-cli core install rp2040:rp2040
 
       - name: Install library dependencies
         run: |
