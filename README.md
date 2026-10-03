@@ -10,6 +10,10 @@ Simple Arduino library used to read the position of an incremental rotary encode
 > [!NOTE]
 > Version [2.0.0](https://github.com/Bendeguz-Cs/Rotary_encoder/releases/tag/v2.0.0) and newer use interrupts, if an **AVR** architecture is selected then the [PinChangeInterrupt](https://github.com/NicoHood/PinChangeInterrupt) library by @NicoHood will be used, for all other architectures **Hardware interrupts** will be used 
 
+## Example 
+
+All the examples are available in the (examples folder)[https://github.com/Bendeguz-Cs/Rotary_encoder/tree/main/examples]. For a more detailed description of the functions, refer to the (wiki)[https://github.com/Bendeguz-Cs/Rotary_encoder/wiki]. 
+
 ## Hardware
 
 Recommended hardware debouncing using a 10 KΩ resistor between the MCU pin and the CLK pin of the encoder(the pin defined first in the initialization) and a 100nF(0.1μF) capacitor between the MCU pin and GND. See below.
