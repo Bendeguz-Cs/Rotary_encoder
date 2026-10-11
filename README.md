@@ -12,7 +12,7 @@ Simple Arduino library used to read the position of an incremental rotary encode
 
 ## Example 
 
-All the examples are available in the (examples folder)[https://github.com/Bendeguz-Cs/Rotary_encoder/tree/main/examples]. For a more detailed description of the functions, refer to the (wiki)[https://github.com/Bendeguz-Cs/Rotary_encoder/wiki]. 
+All the examples are available in the [examples folder](https://github.com/Bendeguz-Cs/Rotary_encoder/tree/main/examples). For a more detailed description of the functions, refer to the [wiki](https://github.com/Bendeguz-Cs/Rotary_encoder/wiki). 
 
 ## Hardware
 
