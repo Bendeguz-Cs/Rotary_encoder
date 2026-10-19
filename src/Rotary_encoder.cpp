@@ -257,7 +257,11 @@ void ENCODER_ISR_ATTR Encoder::updateState() {
     delta = -1;
   }
 
-  _quadState += delta;
+  if ((delta > 0 && _quadState < 0) || (delta < 0 && _quadState > 0)) {
+    _quadState = delta;
+  } else {
+    _quadState += delta;
+  }
 
   // Only count after full 4-step cycle
   if (_quadState >= 4) {
