@@ -1,6 +1,6 @@
 #include <Rotary_encoder.h>
 
-//set the pins CLK and DIO
+//set the pins CLK and DT
 Encoder encoder(4, 5);
 
 void setup() {
