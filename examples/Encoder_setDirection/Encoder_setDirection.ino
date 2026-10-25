@@ -1,7 +1,7 @@
 #include <Rotary_encoder.h>
 
 //change the two defined pins for the two pins you use for your encoder
-Encoder encoder(25, 26);
+Encoder encoder(4, 5);
 
 void setup() {
   Serial.begin(9600);
