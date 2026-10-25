@@ -77,6 +77,8 @@ The library was tested on:
 
 - Seeeduino XIAO ESP32-S3
 
+- Raspberry Pi Pico RP2040
+
 </p>
 </details>
 
