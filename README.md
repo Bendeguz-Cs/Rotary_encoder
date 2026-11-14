@@ -1,4 +1,5 @@
-# Rotary_encoder
+# Rotary_encoder [![Download for Windows](https://img.shields.io/badge/Hardware%20Files-PCBWay-green)](https://www.pcbway.com/project/shareproject/Rotary_encoder_w_LED_ring_6f54efc7.html)
+
 
 Reads the position of a rotary encoder and outputs it with a simple function.
 Also has native NeoPixel ring support with automatic graphics and diaplay refresh. 
